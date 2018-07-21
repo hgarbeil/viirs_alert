@@ -13,7 +13,7 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "viirs_hdf.h"
+#include "viirs_nc.h"
 
 using namespace std;
 
@@ -22,10 +22,10 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
-    viirs_hdf *vhdf = new viirs_hdf() ;
-    vhdf->set_hdf_file (
-    "/lhome/hg/data/viirs/hawaii/GMODO-SVM10-SVM13-SVM16_npp_d20140711_t1241137_e1246541_b14005_c20180713043924959650_noaa_ops.h5") ;
+    viirs_nc *vhdf = new viirs_nc() ;
+    vhdf->set_hdf_file ("/home/harold/vnp02.nc", "/home/harold/vnp03.nc") ;
     cout << "EXITING" << endl ;
+    //vhdf->get_info_thermal() ;
     return 0;
 }
 

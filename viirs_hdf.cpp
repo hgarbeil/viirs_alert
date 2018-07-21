@@ -14,6 +14,7 @@
 #include "viirs_hdf.h"
 #include <iostream>
 #include <string>
+#include <math.h>
 using namespace std ;
 
 viirs_hdf::viirs_hdf() {
@@ -33,6 +34,11 @@ void viirs_hdf::set_hdf_file (char *infile) {
     band10 = 0L ;
     band13 = 0L ;
     band16 = 0L ;
+    startlat = 20.33 ;
+    startlon = -156.2 ;
+    gridspace = .0068 ;
+    nx_grid = int((startlat - endlat) / gridspace) + 1 ;
+    ny_grid = int((endlon - startlon) / gridspace) + 1 ;
 }
 
 void viirs_hdf::get_info () {
@@ -160,6 +166,30 @@ void viirs_hdf::read_thermal () {
         
     }
     
+}
+
+void viirs_hdf::resamp_grid () {
+    int i, ixloc, iyloc ;
+    float latval, lonval, xloc, yloc, xdist, ydist, dist ;
+    float *outgrid = new float [nx_grid * ny_grid * 2] ;
+    float *distgrid = new float [nx_grid * ny_grid] ;
+    for (i=0; i< nx * ny; i++) {
+        latval = lat[i] ;
+        lonval = lon [i] ;
+        xloc = (lonval - startlon) / gridspace ;
+        yloc = (startlat - latval) / gridspace ;
+        ixloc = int(xloc + 0.5) ;
+        iyloc = int(yloc + 0.5) ;
+         
+        if (xloc < 0 || xloc > nx_grid) 
+            continue ;
+        if (yloc < 0 || yloc > ny_grid) 
+            continue ;
+        xdist = xloc - ixloc ;
+        ydist = yloc - iyloc ;
+        dist = sqrt (xdist * xdist + ydist * ydist) ;
+       // xdist =  
+    }
 }
 
 viirs_hdf::viirs_hdf(const viirs_hdf& orig) {
